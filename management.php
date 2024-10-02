@@ -9,7 +9,7 @@
 		<?
 		exit;
 	}
-if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
+	if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
 		?>
 			<script>
 				location.replace("index.php");
@@ -25,10 +25,15 @@ if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
     while($trow = mysqli_fetch_array($tsql_query)) {
         $user_group = $trow[user_group];
 		$user_team = $trow[user_team];
+		$user_team2 = $trow[user_team2];
     }
 
 	// 사원 관리
-    $SQL = "SELECT * FROM eval_user WHERE user_group LIKE '%abov%' AND user_team LIKE '%$user_team%' ORDER BY user_use DESC,user_group asc";
+	if(empty($user_team2)){
+		$SQL = "SELECT * FROM eval_user WHERE user_group LIKE '%$user_group%' and user_use <> 0 ORDER BY user_use DESC,user_group asc";
+	} else {
+		$SQL = " SELECT * FROM eval_user WHERE user_group LIKE '%$user_group%' OR user_group LIKE '%$user_team2%'AND user_use <> 0 ORDER BY user_use DESC, user_group ASC";
+	}
     $sql_query = mysqli_query($db_link, $SQL);
     while($row = mysqli_fetch_array($sql_query)) {
 
@@ -49,11 +54,10 @@ if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
 								<td>$sum[tot_score]</td>
 								<td>$row[user_rank]</td>
 								<td>$row[user_group]</td>
-								<td>$row[last_login]</td>
 								<td>$use_yn</td>
 							</tr>";
     }
-
+	$db_link->close();
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,7 +66,7 @@ if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
 	<div class = "e_header">
 		<h3 class = "h3_header">조직 인사평가</h3>
 	</div>
-		<div class = "e_mid">
+	<div class = "e_mid">
 		<div class = "body_table">
 			<table class = "tbl_score" style = "text-align:center;">
 					<colgroup>
@@ -72,7 +76,6 @@ if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
 						<col style="width:10%;">
 						<col style="width:5%;">
 						<col style="width:25%;">
-						<col style="width:15%;">
 						<col style="width:10%;">
 					</colgroup>
 					<thead>
@@ -83,7 +86,6 @@ if($_SESSION['sess_grade'] < 1) { //관리자 권한확인
 							<th style = "text-align:center;">종합평가점수</th>
 							<th style = "text-align:center;">직무등급</th>
 							<th style = "text-align:center;">소속그룹</th>
-							<th style = "text-align:center;">마지막로그인</th>
 							<th style = "text-align:center;">사용여부</th>
 						</tr>
 					</thead>

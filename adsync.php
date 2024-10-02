@@ -1,7 +1,10 @@
 <?php
-// include_once "/var/www/html/evaluation/conndb.php";
-include "/var/www/web/evaluation/head.lib.php";
-if(!$_SESSION['sess_userid']) { //로그인하지 않았다면 로그인 페이지로 이동
+include "./conndb.php";
+
+$sessionid = $_POST['sessionid'];
+$sessiongrade = $_POST['sessiongrade'];
+
+if(!$sessionid) { //로그인하지 않았다면 로그인 페이지로 이동
 	?>
 		<script>
 			location.replace("index.php");
@@ -9,7 +12,7 @@ if(!$_SESSION['sess_userid']) { //로그인하지 않았다면 로그인 페이�
 	<?
 	exit;
 }
-if($_SESSION['sess_grade'] != 1) { //관리자 권한확인
+if($sessiongrade != 1) { //관리자 권한확인
 	?>
 		<script>
 			location.replace("index.php");
@@ -17,7 +20,7 @@ if($_SESSION['sess_grade'] != 1) { //관리자 권한확인
 	<?
 	exit;
 }
-// mysqli_select_db($db_link,$DB_SNAME);
+
 if (!function_exists('gosync')) {
     function gosync() {
         $db_link = db_conn();
@@ -27,8 +30,8 @@ if (!function_exists('gosync')) {
 
         $adServer = "ldap://210.102.6.151";
         $ldap = ldap_connect($adServer);
-        $username = 'yeona.kim';
-        $password = 'Kitty0000@@';
+        $username = 'pmsadmin';
+        $password = 'woehdir!2';
         $ldaprdn = 'abov' . "\\" . $username;
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);

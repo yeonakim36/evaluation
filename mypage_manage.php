@@ -9,6 +9,14 @@
 		<?
 		exit;
 	}
+	if($_SESSION['sess_grade'] != 1) { //관리자 권한확인
+		?>
+			<script>
+				location.replace("index.php");
+			</script>
+		<?
+		exit;
+	}
 
 	if( empty($_GET[uid]) ) {
 		$user_id = $_SESSION['sess_username'];
@@ -25,6 +33,8 @@
 		$user_rank = $row[user_rank];
 		$user_use = $row[user_use];
 		$user_grade = $row[user_grade];
+		$user_group = $row[user_group];
+		$user_team2 = $row[user_team2];
     }
 
 	// 내 평가 정보
@@ -37,7 +47,6 @@
 		$user_rank = $row[user_rank];
 		$s_id = $row[s_id];
 		$user_use = $row[user_use];
-
 	
 		if($user_rank == 'G1'||$user_rank == 'G2'){
 			$tbody_html_user .=  "<tr>
@@ -84,7 +93,7 @@
 		<div class = "body_info">
 			사번 : <input type = "text" name = "user_no" value = "<?=$user_no?>" class = "input_txt2"> | 
 			이름 : <?=$user_name?> | 
-권한등급 : <select id = "user_grade" name = "user_grade">
+			권한등급 : <select id = "user_grade" name = "user_grade">
 							<option name = "user_grade" value = "0" <?php if($user_grade == "0") echo "selected";?>>일반</option>
 							<option name = "user_grade" value = "2" <?php if($user_grade == "2") echo "selected";?>>차상위평가자</option>
 							<option name = "user_grade" value = "1" <?php if($user_grade == "1") echo "selected";?>>관리자</option>
@@ -99,6 +108,9 @@
 							<option name = "user_rank" value = "임금피크" <?php if($user_rank == "임금피크") echo "selected";?>>임금피크</option>
 						</select> |
 			점수합산 : <span style = "color:red;"><?=$total_score?></span>
+			<br><br>
+			소속 : <?=$user_group?>
+			&emsp;&emsp; | 겸직 : <input type = "text" name = "user_team2" value = "<?=$user_team2?>" class = "input_txt2" style = "width:600;">
 		</div>
 		<div class = "body_table">
 			<table class = "tbl_score" id = "evaluationTable">
@@ -151,6 +163,7 @@
 		var user_no = $("input[name='user_no']").val();
 		var user_rank = $("select[name=user_rank]").val();
 		var user_grade = $("select[name=user_grade]").val();
+		var user_team2 = $("input[name='user_team2']").val();
 
 		if(user_no == ""){
 			alert("사번을 입력해주세요.");
@@ -186,6 +199,7 @@
 					"user_no" : user_no,
 					"user_rank" : user_rank,
 					"user_grade" : user_grade,
+					"user_team2" : user_team2,
 					"etc" : etc
 				},
 				success: function(response) {
@@ -218,6 +232,7 @@
 						"user_no" : user_no,
 						"user_rank": user_rank,
 						"user_grade" : user_grade,
+						"user_team2" : user_team2,
 						"etc" : etc
                     },
                     success: function(response) {

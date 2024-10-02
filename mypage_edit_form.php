@@ -13,13 +13,15 @@
 			$user_no = $_POST['user_no'];
 			$user_rank = $_POST['user_rank'];
 			$user_grade = $_POST['user_grade'];
+			$user_team2 = $_POST['user_team2'];
 			$etc = $_POST['etc'];
 
 			$db_link = db_conn();
 
-			$sql1 = "UPDATE eval_user SET user_no = '$user_no',  
+			$sql1 = "UPDATE eval_user SET user_no = '$user_no',
 										user_rank ='$user_rank',
-										user_grade = '$user_grade'
+										user_grade ='$user_grade',
+										user_team2 = '$user_team2'
 										WHERE user_id = '$user_id'";
 			$update_user = mysqli_query($db_link, $sql1);
 

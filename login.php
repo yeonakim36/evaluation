@@ -53,7 +53,7 @@ if($_SESSION['sess_userid']) { ?>
                 <div class="clause_login" >
                     <div style="border-bottom: 1px solid #d3d3d3;padding-bottom: 10px;">
                         <img src="/evaluation/images/head_logo_pc.png" class="pc_img" alt="main" />
-                        <h3 style="font-weight: 600; float: right;">APEC <font size=2;>(ABOV Performance Evaluation Check)</font></h3>
+                        <h3 style="font-weight: 600; float: right;">APEC <font size=2;>(TEST서버)</font></h3>
                     </div>
                     <div class="login_info" >
                         <div class="login_input">

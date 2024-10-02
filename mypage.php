@@ -10,10 +10,50 @@
 		exit;
 	}
 
+
 	if( empty($_GET[uid]) ) {
 		$user_id = $_SESSION['sess_username'];
 	} else {
-		$user_id = $_GET[uid];
+		if($_SESSION['sess_grade'] ==0) { //관리자 권한확인
+			?>
+				<script>
+					location.replace("index.php");
+				</script>
+			<?
+			exit;
+		}
+		else{	
+			//같은 그룹의 소속인지 확인합니다. 먼저 내 그룹을 조회합니다.
+			$t_id = $_SESSION['sess_username'];
+			$T_SQL = "SELECT * FROM eval_user WHERE user_id LIKE '%$t_id%'";
+			$tsql_query = mysqli_query($db_link, $T_SQL);
+			while($trow = mysqli_fetch_array($tsql_query)) {
+				$user_group = $trow[user_group];
+				$user_team = $trow[user_team];
+				$user_tema2 = $trow[user_team2];
+			}
+		
+			// 대상자의 그룹을 조회합니다. 
+			$SQL = "SELECT * FROM eval_user WHERE  user_id = '$_GET[uid]' and user_group LIKE '%$user_group%' ORDER BY user_use DESC,user_group asc";
+			$tmp = $SQL;
+			$sql_query = mysqli_query($db_link, $SQL);
+			while($row = mysqli_fetch_array($sql_query)) {
+				$user_group2 = $row[user_group];
+			}
+
+			if(strpos($user_group2 ,$user_group)!== false || strpos($user_group2, $user_team2)==false){ //대상자와 내 그룹이 일치&겸직그룹과 일치할때만 조회가능합니다.
+				$user_id = $_GET[uid];
+			}
+			else {
+				?>
+				<script>
+					location.replace("index.php");
+				</script>
+				<?
+			exit;
+			}
+			
+		}
 	}
 
 	// 인사정보

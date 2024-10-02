@@ -16,7 +16,8 @@ if($_SESSION['sess_grade'] != 1) { //관리자 권한확인
 	<?
 	exit;
 }
-//$search_option = $_GET['search_option'];
+$sessionid = $_SESSION['sess_userid'];
+$sessiongrade = $_SESSION['sess_grade'];
 $search_query = $_GET['search_query'];
 
 if(isset($_GET['user_use1'])){
@@ -63,6 +64,18 @@ while($row = mysqli_fetch_array($result)) {
     } else {
         $use_yn = "퇴사";
     }
+	if($row['user_grade'] == 0){
+        $user_gradekr = "일반유저";
+    } else if($row['user_grade'] == 1){
+        $user_gradekr = "<font color=red>관리자";
+    }else if($row['user_grade'] == 2){
+        $user_gradekr = "<font color=green>차상위평가자";
+    }
+	if(!empty($row['user_team2'])){
+		$user_team = "<font color=blue>겸직";
+	} else {
+		$user_team = "";
+	}
 	$sum_sql = "SELECT sum(score) AS tot_score FROM tb_evaluation WHERE user_id = '$row[user_id]'";
 	$sql_query1 = mysqli_query($db_link, $sum_sql);
 	$sum = mysqli_fetch_array($sql_query1);
@@ -73,14 +86,14 @@ while($row = mysqli_fetch_array($result)) {
                             <td style = \"text-align:center;\">$row[user_rank]</td>							
 							<td style = \"text-align:center;\">$sum[tot_score]</td>
                             <td>$row[user_group]</td>
-                            <td>$row[last_login]</td>
+							<td>$user_team</td>
+							<td>$user_gradekr</td>
                             <td>$use_yn</td>
                         </tr>";
 }
 
 // 데이터베이스 연결 닫기
 $db_link->close();
-    
 ?>
 <!DOCTYPE html>
 <html>
@@ -123,9 +136,10 @@ $db_link->close();
 						<col style="width:15%;">
 						<col style="width:5%;">
 						<col style="width:7%;">
-						<col style="width:15%;">
-						<col style="width:25%;">
-						<col style="width:15%;">
+						<col style="width:10%;">
+						<col style="width:20%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
 						<col style="width:10%;">
 					</colgroup>
 					<thead>
@@ -136,7 +150,8 @@ $db_link->close();
 							<th style = "text-align:center;">직무등급</th>
 							<th style = "text-align:center;">종합평가점수</th>
 							<th style = "text-align:left;">소속그룹</th>
-							<th style = "text-align:left;">마지막로그인</th>
+							<th style = "text-align:left;">겸직</th>
+							<th style = "text-align:left;">권한</th>
 							<th style = "text-align:left;">사용여부</th>
 						</tr>
 					</thead>
@@ -153,12 +168,14 @@ $db_link->close();
 <script>
 	function gosync(){
 		var fnc = "gosync";
+var sessionid = "<?=$sessionid?>";
+		var sessiongrade = "<?=$sessiongrade?>";
 
 		$.ajax({
 			type: 'POST',
 			url: 'adsync.php',
 			data: {
-				"function" : fnc
+				"function" : fnc, "sessionid" : sessionid, "sessiongrade" : sessiongrade
 			},
 			success: function(response) {
 				alert('AD와 동기화되었습니다.');

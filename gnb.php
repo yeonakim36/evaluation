@@ -1,8 +1,5 @@
 <?php
 include "./head.php";
-//echo $_SESSION['sess_userid'];
-//echo $_SESSION['sess_grade'];
-
 ?>
 
 <!----------------------------------------PC--------------------------------------------->
@@ -12,14 +9,25 @@ include "./head.php";
 				<ul class="menu01">
 					<li><a href="./introduction.php"><span>인사평가 제도 소개</span></a></li>
 					<li><a href="./mypage.php"><span>나의 인사평가</span></a></li>
-<?php if($_SESSION['sess_grade'] > 0) { ?>
+					<?php if($_SESSION['sess_grade'] > 0) { ?>
 						<li><a href="./management.php"><span>조직인사평가</span></a></li>
 					<? } ?>
+					<li><a href="./myeducation.php"><span>AEMS(나의 교육)</span></a></li>
 					<?php if($_SESSION['sess_grade'] == 1) { ?>
-					<li><span>관리자</span>
+					<li><span>APEC관리</span>
 						<ul class="dept01">
 							<li id="nop"><a href="./search_result.php?search_option=user_id&search_query=&user_use1=1">사원 관리</a></li>
 							<li id="nop"><a href="./eval_upload.php">엑셀 업로드</a></li>
+							<li id="nop"><br></li>
+						</ul>
+					</li>
+					<? } ?>
+					<?php if($_SESSION['sess_manage'] == 1) { ?>
+					<li><span>AEMS관리</span>
+						<ul class="dept01">
+							<li id="nop"><a href="./edu_manage.php">교육과정 관리</a></li>
+							<li id="nop"><a href="./edu_user_list.php">교육활동 관리</a></li>
+							<li id="nop"><a href="./edu_user_manage.php">사원관리</a></li>
 						</ul>
 					</li>
 					<? } ?>
@@ -44,10 +52,10 @@ li {list-style: none; cursor: pointer;}
 .topMenu {position: relative; width: 100%; text-align: center; height: 50px; background-color:#084897; margin:0 auto;}
 .topMenu:after {content: ""; display: block; clear: both;}
 .menu01>ul{z-index: 999;}
-.menu01>li {float: left; width: 16%; line-height: 50px;}
-.menu01 span {font-size: 18px; font-weight: 600; color:white; font-family:'Noto Sans KR';}      
-.dept01 {position: absolute; display: none; width: 16%; padding: 20px 0; background: #fff;z-index:999;}  
-#nop {float: none;}  
+.menu01>li {float: left; width: 13%; line-height: 50px;}
+.menu01 span {font-size: 17px; font-weight: 600; color:white; font-family:'Noto Sans KR';}      
+.dept01 {position: absolute; display: none; width: 13%; padding: 20px 0; background: #fff;z-index:999;}  
+#nop {float: none; font-size:15px;}  
 .none:after {content: ""; display: block; clear: both;}
 .topMenu2 {float:right; padding-right:50px; line-height: 50px; font-size: 17px; font-weight: 600;}
 .join, .login {float:left;padding-left:50px;}

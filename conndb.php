@@ -30,7 +30,7 @@ function db_conn(){
 
 function Debug( $message, $printInfo = NULL )
 {
-    $hFile = fopen( "/res/log/debug-log.txt", "a+" );
+    $hFile = fopen( "/evaluation/log/debug-log.txt", "a+" );
     if( $hFile == false )
         return false;
 

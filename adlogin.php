@@ -4,7 +4,7 @@ $db_link=db_conn();
 mysqli_select_db($db_link,$DB_SNAME);
 if(isset($_POST['userid']) && isset($_POST['userpassword'])) {
     session_start();
-    $adServer = "ldap://210.102.6.151";
+    $adServer = "ldap://210.102.6.140";
     $ldap = ldap_connect($adServer);
     $username = $_POST['userid'];
     $password = $_POST['userpassword'];
@@ -20,6 +20,7 @@ if(isset($_POST['userid']) && isset($_POST['userpassword'])) {
         ldap_sort($ldap,$result,"sn");
         $info = ldap_get_entries($ldap, $result);
 
+        session_start();
         //세션값 생성
         $_SESSION['sess_userid'] = $info[0]["displayname"][0];
         $_SESSION['sess_username'] = $info[0]["samaccountname"][0];
@@ -29,6 +30,8 @@ if(isset($_POST['userid']) && isset($_POST['userpassword'])) {
         $row = mysqli_fetch_array($result);
         
         $_SESSION['sess_grade'] = $row['user_grade'];
+        $_SESSION['sess_level'] = $row['user_level'];
+        $_SESSION['sess_manage'] = $row['user_manage'];
 
         if($result->num_rows == 0) {
             $SQL = " insert into eval_user (user_id, user_name, user_group, user_team, last_login, user_use)
